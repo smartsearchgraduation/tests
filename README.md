@@ -1,2 +1,2 @@
-# Test Docs of Smart Search Graduation Team
+# Test Docs for Smart Search Graduation Team
 
