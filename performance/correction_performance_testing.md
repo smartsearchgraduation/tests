@@ -1,0 +1,14 @@
+## Test Cases
+
+| ID | Description | Steps | Test Data | Pre-condition | Expected Output | Passed/Failed |
+|---|---|---|---|---|---|---|
+| LOC-CR-01 | Correction Locust baseline | 1. Start Correction service<br>2. Run Locust with 1 user<br>3. Capture `/correct` latency | Typo query list | Correction service is healthy | `/correct` requests complete with 0 failures | Passed |
+| LOC-CR-02 | Correction Locust concurrent observation | 1. Start Correction service<br>2. Run Locust with 4 users<br>3. Capture p95 latency and throughput | Typo query list | Correction service is healthy and model is loaded | Concurrent correction requests complete with 0 failures | Passed |
+| PROM-CR-01 | Correction Prometheus metrics snapshot | 1. Run Correction Locust with exporter port 9302<br>2. Scrape `/metrics` while Locust is running<br>3. Save metrics snapshot | Locust-generated metrics | Locust exporter is running | Prometheus latency and request-count metrics are captured | Passed |
+| PERF-CR-001 | BYT5 single-query latency | 1. Warm up model<br>2. Send measured `/correct` requests<br>3. Record latency | 25 typo queries | CUDA and model weights are available | BYT5 latency baseline is recorded | Passed |
+| PERF-CR-002 | T5 single-query latency | 1. Request T5 model<br>2. Send measured `/correct` requests<br>3. Record latency | 25 typo queries | CUDA and T5 model path are available | T5 latency baseline is recorded | Passed |
+| PERF-CR-003 | Cold-start time | 1. Start correction API subprocess<br>2. Poll `/health`<br>3. Send first `/correct` request | Query: `iphn` | API module is available | Cold-start time is recorded | Passed |
+| PERF-CR-004 | Throughput observation | 1. Warm model<br>2. Execute 120 requests using 4 threads<br>3. Record success rate and latency | Repeated typo query set | CUDA and model weights are available | Success rate is at least 99% | Passed |
+| PERF-CR-005 | GPU memory headroom | 1. Warm model<br>2. Execute repeated correction requests<br>3. Record peak GPU memory | Repeated typo query set | CUDA is available | Peak allocated memory remains below 14 GiB | Passed |
+| PERF-CR-006 | Algorithmic accuracy benchmark | 1. Read sample from evaluation dataset<br>2. Submit through `/correct`<br>3. Calculate accuracy metrics | `eval_t5.jsonl` sample | Evaluation dataset and metrics script exist | Accuracy metrics are calculated | Passed |
+| PERF-CR-007 | Benchmark script baseline | 1. Run benchmark script<br>2. Capture p50, p95, throughput, and VRAM<br>3. Record baseline | Benchmark sample queries | Benchmark script and model are available | Benchmark output is valid | Passed |
